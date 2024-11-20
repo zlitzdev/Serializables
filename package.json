@@ -1,0 +1,18 @@
+{
+	"name": "com.zlitz.serializables",
+	"displayName": "Zlitz's Serializables",
+	"author": "ZlitzGames",
+	"version": "1.0.0",
+	"unity": "2022.3",
+	"description": "Add more serializable types.",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/zlitzdev/Serializables.git"
+	},
+	"keywords": [
+		"utility"
+	],
+	"samples": [
+	]
+}

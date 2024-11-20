@@ -1,0 +1,14 @@
+{
+    "name": "Zlitz.General.Serializables.Runtime",
+    "rootNamespace": "Zlitz.General.Serializables",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
