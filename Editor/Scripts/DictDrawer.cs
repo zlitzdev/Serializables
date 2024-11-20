@@ -42,13 +42,15 @@ namespace Zlitz.General.Serializables
                         return;
                     }
 
-                    object currentElementValue = SerializedPropertyHelper.GetPropertyValue(currentElementProperty, out Type propertyType);
-                    if (currentElementValue is UnityEngine.Object unityObject && unityObject == null)
+                    SerializedProperty keyProperty = currentElementProperty.FindPropertyRelative("m_key");
+
+                    object currentElementKey = SerializedPropertyHelper.GetPropertyValue(keyProperty, out Type propertyType);
+                    if (currentElementKey is UnityEngine.Object unityObject && unityObject == null)
                     {
-                        currentElementValue = null;
+                        currentElementKey = null;
                     }
 
-                    if (typeof(UnityEngine.Object).IsAssignableFrom(propertyType) && currentElementValue == null)
+                    if (typeof(UnityEngine.Object).IsAssignableFrom(propertyType) && currentElementKey == null)
                     {
                         dictItem.conflictIcon.style.backgroundImage = s_errorIcon;
                         dictItem.conflictIcon.tooltip = "Object reference value must not be null";
@@ -65,9 +67,11 @@ namespace Zlitz.General.Serializables
                             }
 
                             SerializedProperty otherElementProperty = serializedDict.listProperty.GetArrayElementAtIndex(j);
-                            object otherElementValue = SerializedPropertyHelper.GetPropertyValue(otherElementProperty);
+                            SerializedProperty otherElementKeyProperty = otherElementProperty.FindPropertyRelative("m_key");
 
-                            if (EqualityComparer<object>.Default.Equals(otherElementValue, currentElementValue))
+                            object otherElementKey = SerializedPropertyHelper.GetPropertyValue(otherElementKeyProperty);
+
+                            if (EqualityComparer<object>.Default.Equals(otherElementKey, currentElementKey))
                             {
                                 dictItem.conflictIcon.style.backgroundImage = s_warningIcon;
                                 dictItem.conflictIcon.tooltip = "Duplicated value will be ignored";
@@ -142,7 +146,6 @@ namespace Zlitz.General.Serializables
 
             return listView;
         }
-
 
         private class DictItem : VisualElement
         {
