@@ -42,34 +42,13 @@ namespace Zlitz.General.Serializables
 
         public Set()
         {
-            m_set = new HashSet<T>();
+            m_set = new HashSet<T>(EqualityComparer<T>.Default);
         }
 
         public Set(IEnumerable<T> collection)
         {
-            m_set = new HashSet<T>(collection);
+            m_set = new HashSet<T>(collection, EqualityComparer<T>.Default);
         }
-
-        public Set(IEqualityComparer<T> comparer)
-        {
-            m_set = new HashSet<T>(comparer);
-        }
-
-        public Set(int capacity)
-        {
-            m_set = new HashSet<T>(capacity);
-        }
-
-        public Set(IEnumerable<T> collection, IEqualityComparer<T> comparer)
-        {
-            m_set = new HashSet<T>(collection, comparer);
-        }
-
-        public Set(int capacity, IEqualityComparer<T> comparer)
-        {
-            m_set = new HashSet<T>(capacity, comparer);
-        }
-
 
         public int Count => m_set.Count;
 
