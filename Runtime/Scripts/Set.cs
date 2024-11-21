@@ -1,8 +1,7 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace Zlitz.General.Serializables
     public class Set<T> : ISet<T>, ISerializationCallbackReceiver
     {
         [SerializeField]
-        private List<T> m_list = new List<T>();
+        private System.Collections.Generic.List<T> m_list = new System.Collections.Generic.List<T>();
 
         private HashSet<T> m_set;
 
@@ -22,7 +21,7 @@ namespace Zlitz.General.Serializables
         {
             if (m_list == null)
             {
-                m_list = new List<T>();
+                m_list = new System.Collections.Generic.List<T>();
             }
 
             HashSet<T> missing = new HashSet<T>(m_set);
