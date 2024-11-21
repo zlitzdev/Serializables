@@ -11,7 +11,7 @@ namespace Zlitz.General.Serializables
     public class Set<T> : ISet<T>, ISerializationCallbackReceiver
     {
         [SerializeField]
-        private System.Collections.Generic.List<T> m_list = new System.Collections.Generic.List<T>();
+        private List<T> m_list = new List<T>();
 
         private HashSet<T> m_set;
 
@@ -21,7 +21,7 @@ namespace Zlitz.General.Serializables
         {
             if (m_list == null)
             {
-                m_list = new System.Collections.Generic.List<T>();
+                m_list = new List<T>();
             }
 
             HashSet<T> missing = new HashSet<T>(m_set);
