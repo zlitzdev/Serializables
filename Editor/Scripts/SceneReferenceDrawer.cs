@@ -9,16 +9,16 @@ using UnityEditor.UIElements;
 
 namespace Zlitz.General.Serializables
 {
-    [CustomPropertyDrawer(typeof(Scene))]
-    public class SceneDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SceneReference))]
+    public class SceneSceneReferenceDrawer : PropertyDrawer
     {
         private Action m_onSceneListChanged;
 
-        private SerializedScene m_serializedScene;
+        private SerializedSceneReference m_serializedSceneReference;
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            m_serializedScene = new SerializedScene(property);
+            m_serializedSceneReference = new SerializedSceneReference(property);
 
             ObjectField sceneAssetField = new ObjectField(property.displayName);
             sceneAssetField.AddToClassList("unity-base-field__aligned");
@@ -27,12 +27,12 @@ namespace Zlitz.General.Serializables
 
             m_onSceneListChanged = () =>
             {
-                SceneAsset sceneAsset = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                SceneAsset sceneAsset = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                 SceneState sceneState = GetSceneState(sceneAsset);
 
-                m_serializedScene.scenePathProperty.stringValue = sceneAsset == null ? "" : AssetDatabase.GetAssetPath(sceneAsset);
+                m_serializedSceneReference.scenePathProperty.stringValue = sceneAsset == null ? "" : AssetDatabase.GetAssetPath(sceneAsset);
 
-                m_serializedScene.serializedObject.ApplyModifiedProperties();
+                m_serializedSceneReference.serializedObject.ApplyModifiedProperties();
 
                 sceneAssetField.value = sceneAsset;
                 sceneAssetField.labelElement.style.color = sceneState switch
@@ -51,10 +51,10 @@ namespace Zlitz.General.Serializables
             {
                 SceneAsset newSceneAsset = e.newValue as SceneAsset;
 
-                m_serializedScene.sceneAssetProperty.objectReferenceValue = newSceneAsset;
-                m_serializedScene.scenePathProperty.stringValue = newSceneAsset == null ? "" : AssetDatabase.GetAssetPath(newSceneAsset);
+                m_serializedSceneReference.sceneAssetProperty.objectReferenceValue = newSceneAsset;
+                m_serializedSceneReference.scenePathProperty.stringValue = newSceneAsset == null ? "" : AssetDatabase.GetAssetPath(newSceneAsset);
 
-                m_serializedScene.serializedObject.ApplyModifiedProperties();
+                m_serializedSceneReference.serializedObject.ApplyModifiedProperties();
 
                 sceneAssetField.labelElement.style.color = GetSceneState(e.newValue as SceneAsset) switch
                 {
@@ -70,7 +70,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Add to build",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (scene == null)
                         {
                             return;
@@ -98,7 +98,7 @@ namespace Zlitz.General.Serializables
                     },
                     action =>
                     {
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.NotAdded) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -106,7 +106,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Remove from build",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (scene == null)
                         {
                             return;
@@ -132,7 +132,7 @@ namespace Zlitz.General.Serializables
                     },
                     action =>
                     {
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.Valid || state == SceneState.Disabled) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -140,7 +140,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Enable in build",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (scene == null)
                         {
                             return;
@@ -165,7 +165,7 @@ namespace Zlitz.General.Serializables
                     },
                     action =>
                     {
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.Disabled) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -173,7 +173,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Disable in build",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (scene == null)
                         {
                             return;
@@ -198,7 +198,7 @@ namespace Zlitz.General.Serializables
                     },
                     action =>
                     {
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.Valid) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -208,7 +208,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Add to default addressable group",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (AddressableHelper.AddToDefaultGroup(scene))
                         {
                             m_onSceneListChanged?.Invoke();
@@ -220,7 +220,7 @@ namespace Zlitz.General.Serializables
                         {
                             return DropdownMenuAction.Status.Disabled;
                         }
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.Valid || state == SceneState.Disabled || state == SceneState.NotAdded) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -228,7 +228,7 @@ namespace Zlitz.General.Serializables
                 evt.menu.AppendAction("Remove from current addressable group",
                     action =>
                     {
-                        SceneAsset scene = m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset;
+                        SceneAsset scene = m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset;
                         if (AddressableHelper.RemoveFromCurrentGroup(scene))
                         {
                             m_onSceneListChanged?.Invoke();
@@ -240,7 +240,7 @@ namespace Zlitz.General.Serializables
                         {
                             return DropdownMenuAction.Status.Disabled;
                         }
-                        SceneState state = GetSceneState(m_serializedScene.sceneAssetProperty.objectReferenceValue as SceneAsset);
+                        SceneState state = GetSceneState(m_serializedSceneReference.sceneAssetProperty.objectReferenceValue as SceneAsset);
                         return (state == SceneState.Addressable) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
                     }
                 );
@@ -260,7 +260,7 @@ namespace Zlitz.General.Serializables
             return sceneAssetField;
         }
 
-        ~SceneDrawer()
+        ~SceneSceneReferenceDrawer()
         {
             if (m_onSceneListChanged != null)
             {
@@ -302,7 +302,7 @@ namespace Zlitz.General.Serializables
             Addressable
         }
 
-        private struct SerializedScene
+        private struct SerializedSceneReference
         {
             public SerializedObject serializedObject { get; private set; }
 
@@ -310,7 +310,7 @@ namespace Zlitz.General.Serializables
 
             public SerializedProperty scenePathProperty { get; private set; }
 
-            public SerializedScene(SerializedProperty property)
+            public SerializedSceneReference(SerializedProperty property)
             {
                 serializedObject = property.serializedObject;
 
