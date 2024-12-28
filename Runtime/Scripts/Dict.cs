@@ -124,19 +124,19 @@ namespace Zlitz.General.Serializables
         {
             if (m_dict.Remove(key))
             {
-                return true;
-            }
-
-            if (m_list != null)
-            {
-                for (int i = 0; i < m_list.Count; i++)
+                if (m_list != null)
                 {
-                    if (EqualityComparer<TKey>.Default.Equals(m_list[i].key, key))
+                    for (int i = 0; i < m_list.Count; i++)
                     {
-                        m_list.RemoveAt(i);
-                        break;
+                        if (EqualityComparer<TKey>.Default.Equals(m_list[i].key, key))
+                        {
+                            m_list.RemoveAt(i);
+                            break;
+                        }
                     }
                 }
+
+                return true;
             }
 
             return false;

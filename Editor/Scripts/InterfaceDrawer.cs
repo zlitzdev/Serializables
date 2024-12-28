@@ -176,27 +176,25 @@ namespace Zlitz.General.Serializables
                 }
             }
 
-            if (serializedInterface.valueProperty.managedReferenceValue != null && SerializedPropertyHelper.IsPropertyArrayElement(property, out int elementIndex, out string arrayPath))
+            if (serializedInterface.valueProperty.managedReferenceValue != null)
             {
-                SerializedProperty arrayProperty = SerializedPropertyHelper.GetPropertyByPath(serializedInterface.serializedObject, arrayPath);
-                for (int i = 0; i < elementIndex; i++)
+                SerializedProperty it = serializedInterface.serializedObject.GetIterator();
+                while (it.Next(true))
                 {
-                    SerializedProperty siblingProperty = arrayProperty.GetArrayElementAtIndex(i);
-                    SerializedInterface siblingInterface = new SerializedInterface(siblingProperty);
-                    if (siblingInterface.valueProperty.managedReferenceValue == null)
+                    if (it.propertyPath == serializedInterface.valueProperty.propertyPath)
                     {
-                        continue;
+                        break;
                     }
 
-                    if (serializedInterface.valueProperty.managedReferenceId == siblingInterface.valueProperty.managedReferenceId)
+                    if (it.propertyType == SerializedPropertyType.ManagedReference && it.managedReferenceValue != null && it.managedReferenceId == serializedInterface.valueProperty.managedReferenceId)
                     {
-                        Type currentValueType = siblingInterface.valueProperty.managedReferenceValue.GetType();
+                        Type currentValueType = it.managedReferenceValue.GetType();
                         if (currentValueType.IsSerializable)
                         {
                             using (MemoryStream stream = new MemoryStream())
                             {
                                 IFormatter formatter = new BinaryFormatter();
-                                formatter.Serialize(stream, siblingInterface.valueProperty.managedReferenceValue);
+                                formatter.Serialize(stream, it.managedReferenceValue);
                                 stream.Seek(0, SeekOrigin.Begin);
 
                                 serializedInterface.valueProperty.managedReferenceValue = formatter.Deserialize(stream);
@@ -208,8 +206,7 @@ namespace Zlitz.General.Serializables
                         }
 
                         serializedInterface.managedReferenceIdProperty.longValue = serializedInterface.valueProperty.managedReferenceId;
-
-                        serializedInterface.serializedObject.ApplyModifiedProperties();
+                        serializedInterface.valueProperty.serializedObject.ApplyModifiedProperties();
 
                         break;
                     }
