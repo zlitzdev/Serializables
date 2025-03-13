@@ -29,6 +29,11 @@ namespace Zlitz.General.Serializables
             for (int i = 0; i < m_list.Count; i++) 
             {
                 TKey key = m_list[i].key;
+                if (key == null)
+                {
+                    continue;
+                }
+
                 if (handledKeys.Add(key))
                 {
                     if (!m_dict.TryGetValue(key, out TValue value))
