@@ -22,7 +22,7 @@ namespace Zlitz.General.Serializables
             VisualElement root = new VisualElement();
             root.style.flexDirection = FlexDirection.Row;
 
-            JsonValueField jsonValueField = new JsonValueField(property.displayName);
+            JsonValueField jsonValueField = new JsonValueField(preferredLabel ?? property.displayName);
             jsonValueField.style.flexGrow = 1.0f;
             jsonValueField.SetProperty(property);
             root.Add(jsonValueField);

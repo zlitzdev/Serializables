@@ -21,7 +21,7 @@ namespace Zlitz.General.Serializables
             ListView listView = new ListView();
             listView.BindProperty(serializedSet.listProperty);
 
-            listView.headerTitle             = property.displayName;
+            listView.headerTitle             = preferredLabel ?? property.displayName;
             listView.showAddRemoveFooter     = true;
             listView.showFoldoutHeader       = true;
             listView.showBoundCollectionSize = false;

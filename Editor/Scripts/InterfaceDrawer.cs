@@ -30,7 +30,7 @@ namespace Zlitz.General.Serializables
             valueContainer.style.flexGrow = 1.0f;
             root.Add(valueContainer);
 
-            ObjectField unityObjectField = new ObjectField(property.displayName);
+            ObjectField unityObjectField = new ObjectField(preferredLabel ?? property.displayName);
             unityObjectField.AddToClassList("unity-base-field__aligned");
             unityObjectField.style.flexGrow = 1.0f;
             unityObjectField.allowSceneObjects = true;

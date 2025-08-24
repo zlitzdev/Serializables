@@ -20,7 +20,7 @@ namespace Zlitz.General.Serializables
             label.style.marginBottom = 2.0f;
             label.style.marginLeft = 4.0f;
             label.style.marginTop = 2.0f;
-            label.text = property.displayName;
+            label.text = preferredLabel ?? property.displayName;
             root.Add(label);
 
             VisualElement container = new VisualElement();

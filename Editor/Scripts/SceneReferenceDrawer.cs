@@ -20,7 +20,7 @@ namespace Zlitz.General.Serializables
         {
             m_serializedSceneReference = new SerializedSceneReference(property);
 
-            ObjectField sceneAssetField = new ObjectField(property.displayName);
+            ObjectField sceneAssetField = new ObjectField(preferredLabel ?? property.displayName);
             sceneAssetField.AddToClassList("unity-base-field__aligned");
             sceneAssetField.style.flexGrow = 1.0f;
             sceneAssetField.objectType = typeof(SceneAsset);

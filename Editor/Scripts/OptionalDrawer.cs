@@ -14,7 +14,7 @@ namespace Zlitz.General.Serializables
             VisualElement container = new VisualElement();
             container.style.flexDirection = FlexDirection.Row;
 
-            PropertyField valueField = new PropertyField(serializedOptional.valueProperty, property.displayName);
+            PropertyField valueField = new PropertyField(serializedOptional.valueProperty, preferredLabel ?? property.displayName);
             valueField.style.flexGrow = 1.0f;
             container.Add(valueField);
 
