@@ -188,22 +188,7 @@ namespace Zlitz.General.Serializables
 
                     if (it.propertyType == SerializedPropertyType.ManagedReference && it.managedReferenceValue != null && it.managedReferenceId == serializedInterface.valueProperty.managedReferenceId)
                     {
-                        Type currentValueType = it.managedReferenceValue.GetType();
-                        if (currentValueType.IsSerializable)
-                        {
-                            using (MemoryStream stream = new MemoryStream())
-                            {
-                                IFormatter formatter = new BinaryFormatter();
-                                formatter.Serialize(stream, it.managedReferenceValue);
-                                stream.Seek(0, SeekOrigin.Begin);
-
-                                serializedInterface.valueProperty.managedReferenceValue = formatter.Deserialize(stream);
-                            }
-                        }
-                        else
-                        {
-                            serializedInterface.valueProperty.managedReferenceValue = Activator.CreateInstance(currentValueType);
-                        }
+                        serializedInterface.valueProperty.managedReferenceValue = DuplicateManagedReference(it.managedReferenceValue);
 
                         serializedInterface.managedReferenceIdProperty.longValue = serializedInterface.valueProperty.managedReferenceId;
                         serializedInterface.valueProperty.serializedObject.ApplyModifiedProperties();
@@ -324,6 +309,19 @@ namespace Zlitz.General.Serializables
             }
 
             return obj;
+        }
+
+        private static object DuplicateManagedReference(object original)
+        {
+            if (original == null)
+            {
+                return null;
+            }
+
+            Type type = original.GetType();
+            string json = JsonUtility.ToJson(original);
+            return JsonUtility.FromJson(json, type);
+
         }
 
         private struct SerializedInterface
