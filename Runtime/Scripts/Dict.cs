@@ -24,7 +24,7 @@ namespace Zlitz.General.Serializables
                 m_list = new List<Pair<TKey, TValue>>();
             }
 
-            HashSet<TKey> handledKeys = new HashSet<TKey>(EqualityComparer<TKey>.Default);
+            List<TKey> handledKeys = new List<TKey>();
 
             for (int i = 0; i < m_list.Count; i++) 
             {
@@ -34,16 +34,19 @@ namespace Zlitz.General.Serializables
                     continue;
                 }
 
-                if (handledKeys.Add(key))
+                if (handledKeys.Contains(key))
                 {
-                    if (!m_dict.TryGetValue(key, out TValue value))
-                    {
-                        m_list.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-                    m_list[i] = new Pair<TKey, TValue>(key, value);
+                    continue;
                 }
+                handledKeys.Add(key);
+
+                if (!m_dict.TryGetValue(key, out TValue value))
+                {
+                    m_list.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                m_list[i] = new Pair<TKey, TValue>(key, value);
             }
 
             HashSet<KeyValuePair<TKey, TValue>> missing = new HashSet<KeyValuePair<TKey, TValue>>(m_dict, new PairComparer());
@@ -204,7 +207,7 @@ namespace Zlitz.General.Serializables
 
         private class PairComparer : IEqualityComparer<KeyValuePair<TKey, TValue>>
         {
-            private EqualityComparer<TKey> m_keyComparer = EqualityComparer<TKey>.Default;
+            private EqualityComparer<object> m_keyComparer = EqualityComparer<object>.Default;
 
             public bool Equals(KeyValuePair<TKey, TValue> x, KeyValuePair<TKey, TValue> y)
             {

@@ -24,7 +24,7 @@ namespace Zlitz.General.Serializables
                 m_list = new List<T>();
             }
 
-            HashSet<T> missing = new HashSet<T>(m_set);
+            HashSet<T> missing = new HashSet<T>(m_set, new Comparer());
             missing.ExceptWith(m_list);
             m_list.AddRange(missing);
         }
@@ -169,6 +169,21 @@ namespace Zlitz.General.Serializables
                     continue;
                 }
                 m_list.RemoveAt(i);
+            }
+        }
+
+        private class Comparer : IEqualityComparer<T>
+        {
+            private EqualityComparer<object> m_comparer = EqualityComparer<object>.Default;
+
+            public bool Equals(T x, T y)
+            {
+                return m_comparer.Equals(x, y);
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return m_comparer.GetHashCode(obj);
             }
         }
     }
